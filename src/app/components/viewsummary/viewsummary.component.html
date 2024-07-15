@@ -1,0 +1,30 @@
+<div class="user-views-container">
+  <div class="header">
+    <h2>User Views</h2>
+  </div>
+
+  <div class="views-list">
+    <div class="view-item">
+      <p><strong>User1:</strong> I think the new policy is great for small businesses.</p>
+      <span class="timestamp">2 hours ago</span>
+    </div>
+    <div class="view-item">
+      <p><strong>User2:</strong> We need more focus on education reforms.</p>
+      <span class="timestamp">4 hours ago</span>
+    </div>
+    <!-- More views... -->
+  </div>
+
+  <div class="chatbot-container">
+    <h3>Chatbot Summary</h3>
+    <div class="chat-window">
+      <div class="chat-messages" #summaryElement>
+        <!-- Summary content will be here -->
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="Type a message..." [(ngModel)]="userMessage" />
+        <button (click)="summarizeViews()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
