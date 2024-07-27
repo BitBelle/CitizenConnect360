@@ -32,14 +32,17 @@
             </div>
             <div class="incident-list">
               <div class="user-incident" *ngFor="let incident of filteredIncidents">
-                <img [src]="incident.image" alt="User Avatar" class="user-avatar">
+                <!-- <img [src]="" alt="" class="user-avatar"> -->
+                <div class="user-avatar-placeholder" >
+                  <p class="user-initial">{{ incident.userName[0] }}</p>
+                </div>
                 <div class="incident-details">
                   <div class="user-info">
                     <p class="user-name">{{ incident.userName }}</p>
-                    <p class="incident-time">{{ incident.time }}</p>
+                    <p class="incident-time">{{ incident.createdAt }}</p>
                   </div>
-                  <p class="incident-description">{{ incident.description }}</p>
-                  <img *ngIf="incident.image" [src]="incident.image" alt="Incident Image" class="incident-image">
+                  <p class="incident-description">{{ incident.incidentDesc }}</p>
+                  <!-- <img *ngIf="incident.incidentImg" [src]="incident.incidentImg" alt="Incident Image" class="incident-image"> -->
                   <div class="interaction-buttons">
                     <button class="like-btn">Like</button>
                     <button class="comment-btn">Comment</button>
@@ -53,14 +56,14 @@
     </div>
 
     <div class="sub-container3">
-        <div class="user-activity">
+        <!-- <div class="user-activity">
             <h3>Recent User Activity</h3>
             <ul>
                 <li>John Doe reported a pothole.</li>
                 <li>Jane Smith liked an incident.</li>
                 <li>Michael Brown commented on an incident.</li>
             </ul>
-        </div>
+        </div> -->
         <div class="announcements">
             <h3>Announcements</h3>
             <p>No new announcements.</p>

@@ -2,21 +2,11 @@
     <div class="sub-container1">
         <div class="trending-views">
             <h3>Latest Views</h3>
-            <div class="view-card">
+            <div class="view-card" *ngFor="let view of views">
                 <div class="view-content">
-                    <p>Interesting insights on recent events.</p>
+                    <p>{{ view.viewContent }}</p>
                 </div>
-            </div>
-            <div class="view-card">
-                <div class="view-content">
-                    <p>Another user's thoughts on the current situation..</p>
-                </div>
-            </div>
-            <!-- Dummy Data for Other Views -->
-            <div class="view-card">
-                <div class="view-content">
-                    <p>Interesting insights on recent events...</p>
-                </div>
+                <!-- <button (click)="deleteView(view.userId)">Delete</button> -->
             </div>
         </div>
     </div>
@@ -24,69 +14,38 @@
     <div class="sub-container2">
         <div class="share-post">
             <label for="postInput">Share what's happening around you</label>
-            <input type="text" id="postInput" placeholder="Share your thoughts">
-            <button>Post View</button>
+            <input type="text" id="postInput" [(ngModel)]="viewContent" placeholder="Share your thoughts">
+            <button (click)="addView()">Post View</button>
         </div>
 
         <hr class="separator">
 
-        <!-- User's Post -->
-        <div class="post">
+        <div class="post" *ngFor="let view of views">
             <img src="/assets/user1.jpg" alt="Profile Image">
             <div class="post-details">
-                <p class="username">Mary Jane</p>
-                <p class="timestamp">9:30am</p>
+                <p class="username">{{ view.userName }}</p>
+                <p class="timestamp">{{ view.createdAt }}</p>
                 <div class="posted-comment">
-                    <p>Peacefull Protests!</p>
+                    <p>{{ view.viewContent }}</p>
                 </div>
             </div>
         </div>
 
         <hr class="separator">
-
-        <!-- Other User's Posts (Dummy Data) -->
-        <div class="post">
-            <img src="/assets/user3.jpg" alt="Other Profile Image">
-            <div class="post-details">
-                <p class="username">Peter Pan</p>
-                <p class="timestamp">10:15am</p>
-                <div class="posted-comment">
-                    <p>Sharing my thoughts on this topic.</p>
-                </div>
-            </div>
-        </div>
-
-        <hr class="separator">
-
-        <div class="post">
-            <img src="/assets/user2.jpg" alt="Other Profile Image">
-            <div class="post-details">
-                <p class="username">Jane Smith</p>
-                <p class="timestamp">10:15am</p>
-                <div class="posted-comment">
-                    <p>Sharing my thoughts on this topic...</p>
-                </div>
-            </div>
-        </div>
-
-        <hr class="separator">
-
     </div>
 
     <div class="sub-container3">
         <div class="user-profile-summary">
             <h3>Recent Activity:</h3>
             <ul>
-                <li>Posted a view on...</li>
-                <li>Commented on...</li>
+                <!-- <li *ngFor="let activity of activities">{{ activity }}</li> -->
             </ul>
         </div>
 
         <div class="notifications">
             <h3>Notifications</h3>
             <ul>
-                <li>User1 liked your post</li>
-                <li>User2 commented on your view</li>
+                <!-- <li *ngFor="let notification of notifications">{{ notification }}</li> -->
             </ul>
         </div>
     </div>

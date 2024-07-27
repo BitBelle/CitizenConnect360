@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
+import { GovDashboardService } from '../../services/gov-dashboard/gov-dashboard.service';
 @Component({
   selector: 'app-govdashboard',
   standalone: true,
@@ -8,16 +9,25 @@ import { Chart, registerables } from 'chart.js';
   templateUrl: './govdashboard.component.html',
   styleUrl: './govdashboard.component.css'
 })
-export class GovdashboardComponent {
+export class GovdashboardComponent implements OnInit{
+  totalUsers: number = 10;
+  totalViews: number = 5;
+  totalIncidents: number = 3;
 
-  constructor(private router:Router) {
-    // Register the components we want to use
+  constructor(private router: Router, private dashboardService: GovDashboardService) {
     Chart.register(...registerables);
   }
 
   ngOnInit(): void {
+    this.loadData();
     this.renderViewsChart();
     this.renderIncidentsChart();
+  }
+
+  loadData(): void {
+    this.dashboardService.getTotalUsers().subscribe(users => this.totalUsers = users);
+    // this.dashboardService.getTotalViews().subscribe(views => this.totalViews = views);
+    // this.dashboardService.getTotalIncidents().subscribe(incidents => this.totalIncidents = incidents);
   }
 
   navigateToUserViews(): void {

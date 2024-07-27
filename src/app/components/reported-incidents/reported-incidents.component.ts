@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Incident } from '../../models/incidents';
+import { Incidents } from '../../models/incidents';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Chart from 'chart.js/auto';
+import { IncidentService } from '../../services/incidents/incident.service';
 
 @Component({
   selector: 'app-reported-incidents',
@@ -13,38 +14,38 @@ import Chart from 'chart.js/auto';
 })
 export class ReportedIncidentsComponent {
   
-  incidents: Incident[] = [
-    {
-      userName: 'John Doe',
-      time: '9:30am',
-      description: 'Saw some suspicious activity near the park.',
-      image: 'https://cdn.pixabay.com/photo/2017/08/06/11/44/people-2591692_1280.jpg'
-    },
-    {
-      userName: 'Jane Smith',
-      time: '10:00am',
-      description: 'Ongoing protest at Main road',
-      image: 'https://cdn.pixabay.com/photo/2020/06/02/15/11/black-lives-matter-5251408_1280.jpg'
-    },
-  ];
+  incidents: Incidents[] = [];
+  filteredIncidents: Incidents[] = this.incidents
 
-  filteredIncidents: Incident[] = this.incidents
-
-  constructor() { }
+  constructor(private incidentService: IncidentService) { }
 
   ngOnInit(): void {
+    this.loadIncidents();
     this.createCategoryChart();
     this.createTrendChart();
   }
 
+  loadIncidents(): void {
+    this.incidentService.getIncidents().subscribe(
+      (data: Incidents[]) => {
+        this.incidents = data;
+        this.filteredIncidents = data;
+      },
+      (error) => {
+        console.error('Error fetching incidents:', error);
+      }
+    );
+  }
+
   filterIncidents(event: any): void {
-    const selectedUserName = event.target.value;
-    if (selectedUserName === 'all') {
+    const selectedType = event.target.value;
+    if (selectedType === 'all') {
       this.filteredIncidents = this.incidents; // Reset to all incidents
     } else {
-      this.filteredIncidents = this.incidents.filter(incident => incident.userName === selectedUserName); // Filter based on selected user name
+      this.filteredIncidents = this.incidents.filter(incident => incident.incidentType === selectedType); // Filter based on selected incident type
     }
   }
+
 
   markAsPriority(incident: any): void {
     // marked-incident as priority

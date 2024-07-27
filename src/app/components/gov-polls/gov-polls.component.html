@@ -2,7 +2,7 @@
     <div class="sub-container1">
         <div class="poll-section">
             <h3>Welcome to the Create Poll Section</h3>
-            <form [formGroup]="pollForm" (ngSubmit)="createPoll()">
+            <form [formGroup]="pollForm" (ngSubmit)="addPoll()">
                 <div class="form-group">
                     <label for="pollQuestion">Poll Question:</label>
                     <input type="text" id="pollQuestion" formControlName="question" placeholder="Enter your poll question">
@@ -11,14 +11,14 @@
                     </div>
                 </div>
                 
-                <div class="form-group" *ngFor="let option of options.controls; let i = index;">
+                <div class="form-group" *ngFor="let option of pollOptions.controls; let i = index;">
                     <label [for]="'option' + i">Answer Option {{ i + 1 }}:</label>
                     <div class="option-input">
                         <input type="text" [id]="'option' + i" formControlName="{{ i }}" placeholder="Enter poll answer option">
                         <button type="button" (click)="removeOption(i)" class="remove-btn">Remove</button>
                     </div>
-                    <div *ngIf="options.controls[i]?.touched && options.controls[i]?.invalid">
-                        <small *ngIf="options.controls[i]?.errors?.['required']">Option is required</small>
+                    <div *ngIf="pollOptions.controls[i]?.touched && pollOptions.controls[i]?.invalid">
+                        <small *ngIf="pollOptions.controls[i]?.errors?.['required']">Option is required</small>
                     </div>
                 </div>
                 
@@ -33,15 +33,20 @@
                 </div>
                 
                 <button type="submit" [disabled]="pollForm.invalid" class="submit-btn">Create Poll</button>
+
+                <div *ngIf="successMessage" class="success-message">
+                    {{ successMessage }}
+                  </div>
+                  
             </form>
         </div>
 
         <div class="created-polls">
             <h3>Created Polls</h3>
             <div *ngFor="let poll of polls" class="poll-item">
-                <p>{{ poll.question }}</p>
+                <p>{{ poll.pollQuestion }}</p>
                 <div class="poll-options">
-                    <div *ngFor="let option of poll.options" class="option">
+                    <div *ngFor="let option of poll.pollOption" class="option">
                         <p>{{ option }}</p>
                     </div>
                 </div>
@@ -57,7 +62,7 @@
         <div class="poll-results">
             <h3>Poll Results</h3>
             <div *ngIf="selectedPoll">
-                <p>{{ selectedPoll.question }}</p>
+                <p>{{ selectedPoll. pollQuestion }}</p>
                 <div class="graph">
                     <canvas id="pollResultsChart"></canvas>
                 </div>

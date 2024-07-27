@@ -1,23 +1,37 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { ViewService } from '../../services/views/view.service';
+import { Views } from '../../models/view';
 
 @Component({
   selector: 'app-viewsummary',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './viewsummary.component.html',
-  styleUrl: './viewsummary.component.css'
+  styleUrls: ['./viewsummary.component.css']
 })
-
-export class ViewsummaryComponent implements OnInit{
+export class ViewsummaryComponent implements OnInit {
   @ViewChild('summaryElement') summaryElement!: ElementRef;
   userMessage: string = '';
-  
-  constructor(){}
+  views: Views[] = [];  // Replace with your actual view model
+
+  constructor(private viewService: ViewService) {}
 
   ngOnInit(): void {
-    
+    this.loadViews();
+  }
+
+  loadViews(): void {
+    this.viewService.getViews().subscribe(
+      (data: any[]) => {
+        this.views = data;
+      },
+      error => {
+        console.error('Error fetching views:', error);
+      }
+    );
   }
 
   summarizeViews(): void {
@@ -25,11 +39,16 @@ export class ViewsummaryComponent implements OnInit{
       this.addMessage(`User: ${this.userMessage}`, 'user-message');
       this.userMessage = '';
 
-      // Placeholder logic for chatbot summary
-      const summary = 'Chatbot: Summary of user views: Increased focus on small businesses and education reforms.';
-      setTimeout(() => {
-        this.addMessage(summary, 'chatbot-message');
-      }, 1000); // Simulate response delay
+      // Send user message to chatbot backend
+      this.viewService.getChatbotSummary(this.userMessage).subscribe(
+        response => {
+          const summary = `Chatbot: ${response.answerGiven}`;
+          this.addMessage(summary, 'chatbot-message');
+        },
+        error => {
+          console.error('Error getting chatbot summary:', error);
+        }
+      );
     }
   }
 
@@ -40,5 +59,4 @@ export class ViewsummaryComponent implements OnInit{
     this.summaryElement.nativeElement.appendChild(messageElement);
     this.summaryElement.nativeElement.scrollTop = this.summaryElement.nativeElement.scrollHeight;
   }
-
 }

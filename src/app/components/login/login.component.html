@@ -11,14 +11,15 @@
     </div>
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" formControlName="password">
-      <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-        <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</small>
+      <input type="password" id="password" formControlName="upassword">
+      <div *ngIf="loginForm.get('upassword')?.touched && loginForm.get('upassword')?.invalid">
+        <small *ngIf="loginForm.get('upassword')?.errors?.['required']">Password is required</small>
       </div>
     </div>
     <button type="submit" [disabled]="loginForm.invalid">Login</button>
     <div class="forgot-password-link" (click)="toggleForgotPassword()">Forgot Password?</div>
   </form>
+
   <div *ngIf="showForgotPassword" class="forgot-password-container">
     <h3>Reset Password</h3>
     <form (ngSubmit)="onForgotPasswordSubmit()" [formGroup]="forgotPasswordForm">

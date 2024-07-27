@@ -3,8 +3,8 @@ import { SignupComponent } from '../signup/signup.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { User } from '../../models/user';
-import { AuthService } from '../../services/auth.service';
+import { Payload, User } from '../../models/user';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -16,8 +16,10 @@ import { AuthService } from '../../services/auth.service';
 
 export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false
-  currentUser: User | null = null
-  userRole: string | null = null
+  // currentUser: User | null = null
+  roleName: string | null = null
+
+  user! : Payload
 
   // defining navigation links
   navLinks: { path: string, label: string }[] = [];
@@ -27,47 +29,17 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = this.auth.isLoggedIn();
-    this.userRole = localStorage.getItem('userRole');
-
-    // Set navLinks based on user role
-    switch (this.userRole) {
-      case 'Citizen':
-        this.navLinks = [
-          { path: '/home', label: 'Home' },
-          { path: '/educate', label: 'Educate' },
-          { path: '/views', label: 'Views' },
-          { path: '/incidents', label: 'Report Incidents' },
-          { path: '/polls', label: 'Polls' },
-          { path: '/logout', label: 'Logout' }
-        ];
-        break;
-      case 'Gov-Official':
-        this.navLinks = [
-          { path: '/gov-dash', label: 'Gov-Dashboard' },
-          { path: '/viewsummary', label: 'Citizen Views' },
-          { path: '/reported-incidents', label: 'Reported Incidents' },
-          { path: '/create-polls', label: 'Create Polls' },
-          { path: '/logout', label: 'Logout' }
-        ];
-        break;
-      case 'Admin':
-        this.navLinks = [
-          { path: '/admin-dashboard', label: 'Admin Dashboard' },
-          { path: '/user-management', label: 'User Management' },
-          { path: '/logout', label: 'Logout' }
-        ];
-        break;
-      default:
-        this.navLinks = [
-          { path: '/login', label: 'Login' },
-          { path: '/signup', label: 'Signup' }
-        ];
-        break;
-    }
+    const currentUser = localStorage.getItem('currentUser');
+    this.roleName = currentUser ? JSON.parse(currentUser).roleName : null;
   }
 
-  logout(): void {
+  // logout(): void {
+  //   this.auth.logout();
+  //   this.router.navigate(['/login']);
+  // }
+  logout() {
     this.auth.logout();
-    this.router.navigate(['/login']);
+    this.isLoggedIn = false;
+    this.roleName = null;
   }
 }

@@ -5,23 +5,23 @@
 
     <div class="stats-cards">
         <div class="card" (click)="navigateToUserViews()">
-            <h3><i class="fas fa-users"></i> Total Users</h3>
-            <p>120</p>
+          <h3><i class="fas fa-users"></i> Total Users</h3>
+          <p>{{ totalUsers }}</p>
         </div>
         <div class="card">
-            <h3><i class="fas fa-eye"></i> Total Views</h3>
-            <p>340</p>
+          <h3><i class="fas fa-eye"></i> Total Views</h3>
+          <p>{{ totalViews }}</p>
         </div>
         <div class="card">
-            <h3><i class="fas fa-exclamation-triangle"></i> Total Incidents</h3>
-            <p>25</p>
+          <h3><i class="fas fa-exclamation-triangle"></i> Total Incidents</h3>
+          <p>{{ totalIncidents }}</p>
         </div>
         <!-- <div class="card">
-            <h3><i class="fas fa-poll"></i> Poll Contributions</h3>
-            <p>80</p>
+          <h3><i class="fas fa-poll"></i> Poll Contributions</h3>
+          <p>80</p>
         </div> -->
-    </div>
-
+      </div>
+      
     <div class="charts">
         <div class="chart-container">
             <h3>Views Trend</h3>

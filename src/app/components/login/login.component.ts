@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { AppState } from '../../State';
+import { Store } from '@ngrx/store';
+import { AuthActions } from '../../State/Actions/auth.action';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
+
 export class LoginComponent {
 
   loginForm!: FormGroup
@@ -19,53 +24,59 @@ export class LoginComponent {
   errorMessage: string | null = null
 
 
-  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) { }
+
+  constructor(private fb: FormBuilder, private router: Router, private store:Store<AppState>) { }
+
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       userEmail: this.fb.control('', [Validators.required, Validators.email]),
-      password: this.fb.control('', Validators.required)
+      upassword: this.fb.control('', Validators.required)
     })
 
+    
     this.forgotPasswordForm = this.fb.group({
       resetEmail: ['', [Validators.required, Validators.email]]
     })
   }
 
+  
+
   onSubmit() {
-    if (this.loginForm.valid) {
-      const loginData = this.loginForm.value;
-      this.auth.loginUser(loginData).subscribe(
-        response => {
-          if (response) {
-            const user = response
-            if(user?.userRole === 'Admin'){
-              this.router.navigate(['/admin-dash'])
-            } else if (user?.userRole === 'Government Official'){
-              this.router.navigate(['/gov-dash'])
-            } else {
-              this.router.navigate([''])
-            }
-          } else {
-            this.errorMessage = 'An error occured! Please try again!'
-          }
-        },
-        error => {
-          this.errorMessage = 'An error occured! Please try again!'
-        }
-      );
-    }
+    console.log(this.loginForm);
+    this.store.dispatch(AuthActions.login({user:this.loginForm.value}))
+    
   }
+  
 
   toggleForgotPassword() {
     this.showForgotPassword = !this.showForgotPassword;
   }
 
+  // onForgotPasswordSubmit() {
+  //   if (this.forgotPasswordForm.valid) {
+  //     const resetEmail = this.forgotPasswordForm.value.resetEmail;
+  //     this.auth.requestPasswordReset(resetEmail).subscribe(
+  //       response => {
+  //         console.log('Reset link sent successfully');
+  //         // Handle successful response, e.g., show a success message
+  //       },
+  //       error => {
+  //         console.error('Error sending reset link:', error);
+  //         // Handle error response, e.g., show an error message
+  //       }
+  //     );
+  //   }
+  // }
+
   onForgotPasswordSubmit() {
     if (this.forgotPasswordForm.valid) {
-      const resetEmail = this.forgotPasswordForm.value.resetEmail;
-      // Handle password reset logic using local storage
-      console.log('Reset link sent to:', resetEmail);
+      const resetEmail = this.forgotPasswordForm.value.resetEmail
+      console.log('Form valid dispatchin action', resetEmail)
+      this.store.dispatch(AuthActions.requestPasswordReset({ userEmail: resetEmail }));
+    } else {
+      console.log('Form Valid');
+      
     }
   }
 

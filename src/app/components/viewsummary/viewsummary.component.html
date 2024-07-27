@@ -4,15 +4,19 @@
   </div>
 
   <div class="views-list">
-    <div class="view-item">
-      <p><strong>User1:</strong> I think the new policy is great for small businesses.</p>
-      <span class="timestamp">2 hours ago</span>
+    <div *ngFor="let view of views" class="view-item">
+      <div class="user-info">
+        <div class="profile-img">
+          <img *ngIf="view.userImg; else noImg" [src]="view.userImg" alt="">
+          <ng-template #noImg>
+            <div class="profile-placeholder"></div>
+          </ng-template>
+        </div>
+        <p><strong>{{ view.userName }}:</strong></p>
+      </div>
+      <p>{{ view.viewContent }}</p>
+      <span class="timestamp">{{ view.createdAt | date:'short' }}</span>
     </div>
-    <div class="view-item">
-      <p><strong>User2:</strong> We need more focus on education reforms.</p>
-      <span class="timestamp">4 hours ago</span>
-    </div>
-    <!-- More views... -->
   </div>
 
   <div class="chatbot-container">
